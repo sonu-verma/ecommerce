@@ -21,7 +21,7 @@
     <link rel="apple-touch-icon-precomposed" href="{{ asset('assets/admin/images/favicon.ico') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/admin/css/sweetalert.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/admin/css/custom.css') }}">
-      @stack('styles')
+        @stack('styles')
 </head>
 <body class="body">
     <div id="wrapper">
@@ -83,7 +83,7 @@
                                             </a>
                                         </li>
                                         <li class="sub-menu-item">
-                                            <a href="brands.html" class="">
+                                            <a href="{{ route('brands') }}" class="">
                                                 <div class="text">Brands</div>
                                             </a>
                                         </li>
