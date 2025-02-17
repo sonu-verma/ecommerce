@@ -59,13 +59,13 @@
                                         <div class="text">Products</div>
                                     </a>
                                     <ul class="sub-menu">
-                                        <li class="sub-menu-item">
+                                        {{-- <li class="sub-menu-item">
                                             <a href="add-product.html" class="">
                                                 <div class="text">Add Product</div>
                                             </a>
-                                        </li>
+                                        </li> --}}
                                         <li class="sub-menu-item">
-                                            <a href="products.html" class="">
+                                            <a href="{{ route('products') }}" class="">
                                                 <div class="text">Products</div>
                                             </a>
                                         </li>
@@ -77,11 +77,11 @@
                                         <div class="text">Brand</div>
                                     </a>
                                     <ul class="sub-menu">
-                                        <li class="sub-menu-item">
+                                        {{-- <li class="sub-menu-item">
                                             <a href="add-brand.html" class="">
                                                 <div class="text">New Brand</div>
                                             </a>
-                                        </li>
+                                        </li> --}}
                                         <li class="sub-menu-item">
                                             <a href="{{ route('brands') }}" class="">
                                                 <div class="text">Brands</div>
@@ -95,13 +95,13 @@
                                         <div class="text">Category</div>
                                     </a>
                                     <ul class="sub-menu">
-                                        <li class="sub-menu-item">
+                                        {{-- <li class="sub-menu-item">
                                             <a href="add-category.html" class="">
                                                 <div class="text">New Category</div>
                                             </a>
-                                        </li>
+                                        </li> --}}
                                         <li class="sub-menu-item">
-                                            <a href="categories.html" class="">
+                                            <a href="{{ route('categories') }}" class="">
                                                 <div class="text">Categories</div>
                                             </a>
                                         </li>

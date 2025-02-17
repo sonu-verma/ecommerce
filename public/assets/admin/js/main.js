@@ -224,7 +224,7 @@
     select_colors_theme();
     icon_function();
     box_search();
-    retinaLogos();
+    // retinaLogos();
     preloader();
     
   });

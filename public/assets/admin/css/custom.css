@@ -161,3 +161,18 @@ body {
     width: 20px;
     margin: 0 auto;
 }
+
+.error{
+    color: #dc3545;
+}
+
+
+.galaryItems{
+    display: flex;
+    flex-direction: column;
+    gap: 20px !important;
+}
+.galaryItems img{
+    height: 80px !important;
+    width: 80px !important;
+}

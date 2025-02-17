@@ -5,7 +5,7 @@
 <div class="main-content-inner">
     <div class="main-content-wrap">
         <div class="flex items-center flex-wrap justify-between gap20 mb-27">
-            <h3>Brands</h3>
+            <h3>category</h3>
             <ul class="breadcrumbs flex items-center flex-wrap justify-start gap10">
                 <li>
                     <a href="index.html">
@@ -16,7 +16,7 @@
                     <i class="icon-chevron-right"></i>
                 </li>
                 <li>
-                    <div class="text-tiny">Brands</div>
+                    <div class="text-tiny">Category</div>
                 </li>
             </ul>
         </div>
@@ -27,14 +27,14 @@
                     <form class="form-search">
                         <fieldset class="name">
                             <input type="text" placeholder="Search here..." class="" name="name"
-                                tabindex="2" value="" aria-required="true" required="">
+                                tabindex="2" value="{{ request()->get('name') }}" aria-required="true">
                         </fieldset>
                         <div class="button-submit">
                             <button class="" type="submit"><i class="icon-search"></i></button>
                         </div>
                     </form>
                 </div>
-                <a class="tf-button style-1 w208" href="{{ route('brand.add') }}"><i
+                <a class="tf-button style-1 w208" href="{{ route('category.add') }}"><i
                         class="icon-plus"></i>Add new</a>
             </div>
             <div class="wg-table table-all-user">
@@ -60,38 +60,40 @@
                                 <th>#</th>
                                 <th>Name</th>
                                 <th>Slug</th>
-                                <th>Products</th>
+                                <th>Parent Category</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            
-                            @if($brands->count() == 0)
+
+                            @if($categories->count() == 0)
                                 <tr>
                                     <td colspan="5" style="text-align: center">No data found</td>
                                 </tr>
                             @endif
-                            @foreach($brands as $brand)
+                            @foreach($categories as $category)
                             <tr>
-                                <td>{{ $brand->id }}</td>
+                                <td>{{ $category->id }}</td>
                                 <td class="pname">
-                                    <div class="image">
-                                        <img src="{{  asset("uploads/brands/".$brand->image) }}" alt="" class="image">
-                                    </div>
+                                    @if($category->image)
+                                        <div class="image">
+                                            <img src="{{  asset("uploads/category/".$category->image) }}" alt="" class="image">
+                                        </div>
+                                    @endif
                                     <div class="name">
-                                        <a href="#" class="body-title-2">{{ $brand->name }}</a>
+                                        <a href="#" class="body-title-2">{{ $category->name }}</a>
                                     </div>
                                 </td>
-                                <td>{{ $brand->slug }}</td>
-                                <td><a href="#" target="_blank">1</a></td>
+                                <td>{{ $category->slug }}</td>
+                                <td><a href="#" target="_blank">{{ ($category->parent?->name)}}</a></td>
                                 <td>
                                     <div class="list-icon-function">
-                                        <a href="{{ route('brand.edit', ['brand' => $brand->id])}}">
+                                        <a href="{{ route('category.edit', ['category' => $category->id])}}">
                                             <div class="item edit">
                                                 <i class="icon-edit-3"></i>
                                             </div>
                                         </a>
-                                        <form action="{{ route('brand.delete', ['brand' => $brand->id])}}" id="deleteFrm" method="POST">
+                                        <form action="{{ route('category.delete', ['category' => $category->id])}}" id="deleteFrm" method="POST">
                                             @csrf
                                             <div class="item text-danger delete">
                                                 <i class="icon-trash-2" 
@@ -109,7 +111,7 @@
                 </div>
                 <div class="divider"></div>
                 <div class="flex items-center justify-between flex-wrap gap10 wgp-pagination">
-                    {{ $brands->links()}}
+                    {{ $categories->links()}}
                 </div>
             </div>
         </div>

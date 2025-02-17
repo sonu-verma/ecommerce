@@ -34,11 +34,13 @@ class BrandController extends Controller
         $brand->slug = Str::slug($name);
 
         $image = $request->file('image');
-        $file_extension = $image->extension();
-        $file_name = Carbon::now()->timestamp.'.'.$file_extension;
-        $brand->image = $file_name;
+        if($image){
+            $file_extension = $image->extension();
+            $file_name = Carbon::now()->timestamp.'.'.$file_extension;
+            $brand->image = $file_name;
+            $this->generateBrandThumbnailsImage($image, $file_name);
+        }
         $brand->save();
-        $this->generateBrandThumbnailsImage($image, $file_name);
         return redirect()->route('brands')->with(['status' => 'Brands has been added successfully.']);
     }
 
@@ -103,17 +105,10 @@ class BrandController extends Controller
         $destinationPath = public_path('uploads/brands');
         $filePath = $destinationPath . '/' . $imageName;
         
-        // Ensure directory exists
         if (!file_exists($destinationPath)) {
             mkdir($destinationPath, 0777, true);
         }
         
-        // Process the image
-        // $img = Image::make($image->path()); // Corrected `make()`
-        // $img->fit(124, 124, function ($constraint) {
-        //     $constraint->upsize();
-        // })->save($filePath); // Save the processed image
-
         $image = Image::read($image->path());
         $image->cover(124, 124);
         $image->resize(124, 124, function ($constraint) {
