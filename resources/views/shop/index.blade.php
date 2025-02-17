@@ -327,17 +327,25 @@
           </div>
 
           <div class="shop-acs d-flex align-items-center justify-content-between justify-content-md-end flex-grow-1">
+            <select class="shop-acs__select form-select w-auto border-0 py-0 order-1 order-md-0 mr-10" aria-label="Sort Items" name="total-number" id="per_page_product">
+              <option value="12" {{ request()->get('per_page') == 12 ? "selected": ""}}>12</option>
+              <option value="24" {{ request()->get('per_page') == 24 ? "selected": ""}}>24</option>
+              <option value="48" {{ request()->get('per_page') == 48 ? "selected": ""}}>48</option>
+              <option value="102" {{ request()->get('per_page') == 102 ? "selected": ""}}>102</option>
+            </select>
+
+            <div class="shop-asc__seprator mx-3 bg-light d-none d-md-block order-md-0"></div>
+
             <select class="shop-acs__select form-select w-auto border-0 py-0 order-1 order-md-0" aria-label="Sort Items"
-              name="total-number">
-              <option selected>Default Sorting</option>
-              <option value="1">Featured</option>
-              <option value="2">Best selling</option>
-              <option value="3">Alphabetically, A-Z</option>
-              <option value="3">Alphabetically, Z-A</option>
-              <option value="3">Price, low to high</option>
-              <option value="3">Price, high to low</option>
-              <option value="3">Date, old to new</option>
-              <option value="3">Date, new to old</option>
+              name="total-number" id="sorting_product">
+              <option value="">Default Sorting</option>
+              <option value="1" {{ request()->get('sort_ by') == 1 ? 'selected': ''}}>Featured</option>
+              <option value="2" {{ request()->get('sort_ by') == 2 ? 'selected': ''}}>Alphabetically, A-Z</option>
+              <option value="3" {{ request()->get('sort_ by') == 3 ? 'selected': ''}}>Alphabetically, Z-A</option>
+              <option value="4" {{ request()->get('sort_ by') == 4 ? 'selected': ''}}>Price, low to high</option>
+              <option value="5" {{ request()->get('sort_ by') == 5 ? 'selected': ''}}>Price, high to low</option>
+              <option value="6" {{ request()->get('sort_ by') == 6 ? 'selected': ''}}>Date, old to new</option>
+              <option value="7" {{ request()->get('sort_ by') == 7 ? 'selected': ''}}>Date, new to old</option>
             </select>
 
             <div class="shop-asc__seprator mx-3 bg-light d-none d-md-block order-md-0"></div>
@@ -394,9 +402,28 @@
                       <use href="#icon_next_sm" />
                     </svg></span>
                 </div>
-                <button
-                  class="pc__atc btn anim_appear-bottom btn position-absolute border-0 text-uppercase fw-medium js-add-cart js-open-aside"
-                  data-aside="cartDrawer" title="Add To Cart">Add To Cart</button>
+                
+
+                  @if(Cart::instance('cart')->content()->where('id', $product->id)->count() > 0)
+                  <a class="pc__atc btn anim_appear-bottom btn position-absolute border-0 text-uppercase fw-medium"
+                          href="{{route('shop.cart')}}">Added to Cart</a>
+                  @else
+                    <form name="addtocart-form" method="post" action="{{ route('cart.addToCart') }}">
+                      @csrf
+                      <div class="product-single__addtocart">
+                        <div class="qty-control position-relative">
+                          <input type="number" name="quantity" value="1" min="1" class="qty-control__number text-center">
+                          <div class="qty-control__reduce">-</div>
+                          <div class="qty-control__increase">+</div>
+                        </div><!-- .qty-control -->
+                        <input type="hidden" name="id" value="{{ $product->id }}" />
+                        <input type="hidden" name="name" value="{{ $product->name }}" />  
+                        <input type="hidden" name="price" value="{{ $product->sale_price > 0 ? $product->sale_price : $product->regular_price }}" />
+                        <button type="submit" class="pc__atc btn anim_appear-bottom btn position-absolute border-0 text-uppercase fw-medium" data-aside="cartDrawer">Add to
+                          Cart</button>
+                      </div>
+                    </form>
+                  @endif
               </div>
 
               <div class="pc__info position-relative">
@@ -446,9 +473,32 @@
         </div>
         <div class="divider"></div>
         <div class="flex items-center justify-between flex-wrap gap10 wgp-paginations">
-            {{  $products->links("pagination::bootstrap-5") }}
+            {{  $products->withQueryString()->links("pagination::bootstrap-5") }}
         </div>
       </div>
     </section>
   </main>
+
+
+  <form action="{{ route('shop') }}" method="GET" id="filterForm">
+      <input type="hidden" name="per_page" id="per_page" value="{{ request()->get('per_page') }}"/>
+      <input type="hidden" name="sort_by" id="sort_by" value="{{ request()->get('sort_by') }}"/>
+  </form>
 @endsection
+
+
+@push('scripts')
+    <script>
+        $(document).on("change","#per_page_product", function(e){
+          e.preventDefault();
+          $('#per_page').val($(this).val())
+          $("#filterForm").closest("form").submit();
+        })
+
+        $(document).on("change","#sorting_product", function(e){
+          e.preventDefault();
+          $('#sort_by').val($(this).val())
+          $("#filterForm").closest("form").submit();
+        })
+    </script>
+@endpush

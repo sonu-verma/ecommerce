@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
@@ -53,3 +54,10 @@ Route::middleware(['auth', AuthAdmin::class])->group(function(){
 
 Route::get("shop", [ShopController::class, 'shop'])->name('shop');
 Route::get("shop/{slug}", [ShopController::class, 'detail'])->name('shop.detail');
+Route::get("cart", [CartController::class, 'cart'])->name('shop.cart');
+Route::post("cart/add", [CartController::class, 'addToCart'])->name('cart.addToCart');
+
+Route::put("cart/qty/add/{rowId}", [CartController::class, 'increaseQty'])->name('qty.increase');
+Route::put("cart/qty/remove/{rowId}", [CartController::class, 'decreaseQty'])->name('qty.decrease');
+Route::get("cart/item/remove/{rowId}", [CartController::class, 'deleteCartItem'])->name('cart.item.remove');
+Route::delete("cart/clear", [CartController::class, 'clearCart'])->name('cart.empty');
