@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Brand;
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -14,6 +16,10 @@ class ShopController extends Controller
         }
 
         $sort = $request->get('sort_by');
+        $f_brand = $request->get('f_brand');
+        $f_category = $request->get('f_category');
+        $f_max_price = $request->get('max_price', 500);
+        $f_min_price = $request->get('min_price', 1);
         $o_column = "";
         $o_order = "";
         switch($sort){
@@ -49,8 +55,25 @@ class ShopController extends Controller
                 $o_column = 'id';
                 $o_order = 'desc';
         }
-        $products = Product::with(["brand","category"])->orderBy($o_column,$o_order)->paginate($perPage);
-        return view('shop.index', compact('products'));
+        
+        $brands = Brand::orderBy('name', "asc")->get();
+        $categories = Category::orderBy('name', "asc")->get();
+        $products = Product::with(["brand","category"])
+        ->where(function($query) use($f_brand){
+            if($f_brand){
+                $query->whereIn("id_brand", explode(",", $f_brand))->orWhereRaw("'".$f_brand."'=''");
+            }
+        })
+        ->where(function($query) use($f_category){
+            if($f_category){
+                $query->whereIn("id_category", explode(",", $f_category))->orWhereRaw("'".$f_category."'=''");
+            }
+        })
+        ->where(function($query) use($f_min_price ,$f_max_price){
+            $query->whereBetween("regular_price", [$f_min_price, $f_max_price])->orWhereBetween("sale_price", [$f_min_price, $f_max_price]);
+        })
+        ->orderBy($o_column,$o_order)->paginate($perPage);
+        return view('shop.index', compact('products','brands', 'categories','f_brand','f_category','f_min_price','f_max_price'));
     }
 
 

@@ -29,36 +29,16 @@
               aria-labelledby="accordion-heading-1" data-bs-parent="#categories-list">
               <div class="accordion-body px-0 pb-0 pt-3">
                 <ul class="list list-inline mb-0">
+
+                  @foreach($categories as $category)
                   <li class="list-item">
-                    <a href="#" class="menu-link py-1">Dresses</a>
+                    <span class="menu-link py-1">
+                      <input type="checkbox" name="category" value={{ $category->id}} class="chk-category category-filter" {{ in_array($category->id, explode(",",$f_category))?'checked': '' }}/>
+                      {{ $category->name }}
+                    </span>
+                    <span class="text-right float-end">{{ $category->product->count() }}</span>
                   </li>
-                  <li class="list-item">
-                    <a href="#" class="menu-link py-1">Shorts</a>
-                  </li>
-                  <li class="list-item">
-                    <a href="#" class="menu-link py-1">Sweatshirts</a>
-                  </li>
-                  <li class="list-item">
-                    <a href="#" class="menu-link py-1">Swimwear</a>
-                  </li>
-                  <li class="list-item">
-                    <a href="#" class="menu-link py-1">Jackets</a>
-                  </li>
-                  <li class="list-item">
-                    <a href="#" class="menu-link py-1">T-Shirts & Tops</a>
-                  </li>
-                  <li class="list-item">
-                    <a href="#" class="menu-link py-1">Jeans</a>
-                  </li>
-                  <li class="list-item">
-                    <a href="#" class="menu-link py-1">Trousers</a>
-                  </li>
-                  <li class="list-item">
-                    <a href="#" class="menu-link py-1">Men</a>
-                  </li>
-                  <li class="list-item">
-                    <a href="#" class="menu-link py-1">Jumpers & Cardigans</a>
-                  </li>
+                  @endforeach
                 </ul>
               </div>
             </div>
@@ -164,34 +144,15 @@
                     placeholder="Search" />
                 </div>
                 <ul class="multi-select__list list-unstyled">
-                  <li class="search-suggestion__item multi-select__item text-primary js-search-select js-multi-select">
-                    <span class="me-auto">Adidas</span>
-                    <span class="text-secondary">2</span>
+                  @foreach($brands as $brand)
+                  <li class="list-item">
+                    <span class="menu-link py-1">
+                      <input type="checkbox" name="brand" value={{ $brand->id}} class="chk-brand brand-filter" {{ in_array($brand->id, explode(",",$f_brand))?'checked': '' }}/>
+                      {{ $brand->name }}
+                    </span>
+                    <span class="text-right float-end">{{ $brand->product->count() }}</span>
                   </li>
-                  <li class="search-suggestion__item multi-select__item text-primary js-search-select js-multi-select">
-                    <span class="me-auto">Balmain</span>
-                    <span class="text-secondary">7</span>
-                  </li>
-                  <li class="search-suggestion__item multi-select__item text-primary js-search-select js-multi-select">
-                    <span class="me-auto">Balenciaga</span>
-                    <span class="text-secondary">10</span>
-                  </li>
-                  <li class="search-suggestion__item multi-select__item text-primary js-search-select js-multi-select">
-                    <span class="me-auto">Burberry</span>
-                    <span class="text-secondary">39</span>
-                  </li>
-                  <li class="search-suggestion__item multi-select__item text-primary js-search-select js-multi-select">
-                    <span class="me-auto">Kenzo</span>
-                    <span class="text-secondary">95</span>
-                  </li>
-                  <li class="search-suggestion__item multi-select__item text-primary js-search-select js-multi-select">
-                    <span class="me-auto">Givenchy</span>
-                    <span class="text-secondary">1092</span>
-                  </li>
-                  <li class="search-suggestion__item multi-select__item text-primary js-search-select js-multi-select">
-                    <span class="me-auto">Zara</span>
-                    <span class="text-secondary">48</span>
-                  </li>
+                  @endforeach
                 </ul>
               </div>
             </div>
@@ -215,16 +176,16 @@
             </h5>
             <div id="accordion-filter-price" class="accordion-collapse collapse show border-0"
               aria-labelledby="accordion-heading-price" data-bs-parent="#price-filters">
-              <input class="price-range-slider" type="text" name="price_range" value="" data-slider-min="10"
-                data-slider-max="1000" data-slider-step="5" data-slider-value="[250,450]" data-currency="$" />
+              <input class="price-range-slider" type="text" name="price_range" value="" data-slider-min="{{$f_min_price}}"
+                data-slider-max="{{$f_max_price}}" data-slider-step="5" data-slider-value="[{{$f_min_price}},{{$f_max_price}}]" data-currency="$" />
               <div class="price-range__info d-flex align-items-center mt-2">
                 <div class="me-auto">
                   <span class="text-secondary">Min Price: </span>
-                  <span class="price-range__min">$250</span>
+                  <span class="price-range__min">$1</span>
                 </div>
                 <div>
                   <span class="text-secondary">Max Price: </span>
-                  <span class="price-range__max">$450</span>
+                  <span class="price-range__max">$500</span>
                 </div>
               </div>
             </div>
@@ -483,6 +444,10 @@
   <form action="{{ route('shop') }}" method="GET" id="filterForm">
       <input type="hidden" name="per_page" id="per_page" value="{{ request()->get('per_page') }}"/>
       <input type="hidden" name="sort_by" id="sort_by" value="{{ request()->get('sort_by') }}"/>
+      <input type="hidden" name="f_brand" id="f_brand" value="{{ request()->get('f_brand') }}"/>
+      <input type="hidden" name="f_category" id="f_category" value="{{ request()->get('f_category') }}"/>
+      <input type="hidden" name="min_price" id="min_price" value="{{ request()->get('min_price') }}"/>
+      <input type="hidden" name="max_price" id="max_price" value="{{ request()->get('max_price') }}"/>
   </form>
 @endsection
 
@@ -499,6 +464,48 @@
           e.preventDefault();
           $('#sort_by').val($(this).val())
           $("#filterForm").closest("form").submit();
+        })
+
+        $(document).on("change", '.brand-filter', function(e){
+            e.preventDefault();
+            var brands = "";
+            $("input[name='brand']:checked").each(function(){
+              if(brands == ""){
+                brands += $(this).val()
+              }else{
+                brands += ',' + $(this).val();
+              }
+            });
+
+            $("#f_brand").val(brands)
+            $("#filterForm").closest("form").submit();
+        })
+
+        $(document).on("change", '.category-filter', function(e){
+            e.preventDefault();
+            var categories = "";
+            $("input[name='category']:checked").each(function(){
+              if(categories == ""){
+                categories += $(this).val()
+              }else{
+                categories += ',' + $(this).val();
+              }
+            });
+
+            $("#f_category").val(categories)
+            $("#filterForm").closest("form").submit();
+        })
+
+        
+        $(document).on("change", "input[name='price_range']", function(e){
+            e.preventDefault();
+            var min_max = $(this).val().split(",")
+            console.log(min_max.length);
+            $("#min_price").val(min_max[0]);
+            $("#max_price").val(min_max[1]);
+            setTimeout(function(){
+              $('#filterForm').closest('form').submit();
+            },2000)
         })
     </script>
 @endpush
