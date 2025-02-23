@@ -4,10 +4,12 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CouponController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WishlistController;
 use App\Http\Middleware\AuthAdmin;
 use Illuminate\Support\Facades\Route;
 
@@ -49,7 +51,14 @@ Route::middleware(['auth', AuthAdmin::class])->group(function(){
     Route::post("admin/product/update", [ProductController::class, 'update'])->name('product.update');
     Route::post("admin/product/delete/{product}", [ProductController::class, 'delete'])->name('product.delete');
 
-    
+    // coupons
+    Route::get("admin/coupons", [CouponController::class, 'index'])->name('coupons');
+    Route::get("admin/coupon/add", [CouponController::class, 'add'])->name('coupon.add');
+    Route::post("admin/coupon/store", [CouponController::class, 'store'])->name('coupon.store');
+    Route::get("admin/coupon/edit/{coupon}", [CouponController::class, 'edit'])->name('coupon.edit');
+    Route::post("admin/coupon/update", [CouponController::class, 'update'])->name('coupon.update');
+    Route::DELETE("admin/coupon/delete/{coupon}", [CouponController::class, 'delete'])->name('coupon.delete');
+
 });
 
 Route::get("shop", [ShopController::class, 'shop'])->name('shop');
@@ -61,3 +70,16 @@ Route::put("cart/qty/add/{rowId}", [CartController::class, 'increaseQty'])->name
 Route::put("cart/qty/remove/{rowId}", [CartController::class, 'decreaseQty'])->name('qty.decrease');
 Route::get("cart/item/remove/{rowId}", [CartController::class, 'deleteCartItem'])->name('cart.item.remove');
 Route::delete("cart/clear", [CartController::class, 'clearCart'])->name('cart.empty');
+
+
+# wishlist routes
+Route::get("wishlist", [WishlistController::class, 'index'])->name("wishlist");
+Route::post("wishlist/add", [WishlistController::class, 'addToWishlist'])->name('wishlist.add');
+Route::DELETE("wishlist/remove/{rowId}", [WishlistController::class, 'removeWishlist'])->name('wishlist.remove');
+Route::DELETE("wishlist/clear", [WishlistController::class, 'clearWishlist'])->name('wishlist.clear');
+Route::post("wishlist/move-to-cart/{rowId}", [WishlistController::class, 'moveToCart'])->name('wishlist.moveToCart');
+
+
+# Apply Coupon Code
+Route::post("/cart/apply/coupon-code", [CartController::class, 'applyCouponCode'])->name('cart.applyCouponCode');
+Route::post("/cart/remove/coupon-code", [CartController::class, 'removeCouponCode'])->name('cart.removeCouponCode');

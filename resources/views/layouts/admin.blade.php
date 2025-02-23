@@ -133,7 +133,7 @@
                                     </a>
                                 </li>
                                 <li class="menu-item">
-                                    <a href="coupons.html" class="">
+                                    <a href="{{ route("coupons")}}" class="">
                                         <div class="icon"><i class="icon-grid"></i></div>
                                         <div class="text">Coupns</div>
                                     </a>
@@ -447,7 +447,7 @@
                         @yield('content')
 
                         <div class="bottom-page">
-                            <div class="body-text">Copyright © 2024 E-commerce</div>
+                            <div class="body-text">Copyright © {{ date('Y')}} E-commerce</div>
                         </div>
                     </div>
 

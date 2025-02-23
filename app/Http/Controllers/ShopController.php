@@ -70,8 +70,15 @@ class ShopController extends Controller
             }
         })
         ->where(function($query) use($f_min_price ,$f_max_price){
-            $query->whereBetween("regular_price", [$f_min_price, $f_max_price])->orWhereBetween("sale_price", [$f_min_price, $f_max_price]);
+            if($f_min_price && $f_max_price){
+                $query->whereBetween("regular_price", [$f_min_price, $f_max_price])->orWhereBetween("sale_price", [$f_min_price, $f_max_price]);
+            }
         })
+        // ;
+
+        // $sql = vsprintf(str_replace(array('?'), array('\'%s\''), $products->toSql()), $products->getBindings());
+        // return response()->json($sql);
+
         ->orderBy($o_column,$o_order)->paginate($perPage);
         return view('shop.index', compact('products','brands', 'categories','f_brand','f_category','f_min_price','f_max_price'));
     }

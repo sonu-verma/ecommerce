@@ -15539,3 +15539,20 @@ body.coming-soon-page {
     display: none; }
   .btn-video-player.playing svg.btn-pause {
     display: block; }
+
+
+    .filled-heart svg{
+      color: orangered
+    }
+
+    .error{
+      color: red;
+    }
+
+    .status{
+      color: gold;
+    }
+
+    .success{
+      color: green;
+    }

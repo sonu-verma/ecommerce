@@ -494,10 +494,13 @@
               @endif
             @endguest
   
-            <a href="wishlist.html" class="header-tools__item">
+            <a href="{{ route('wishlist') }}" class="header-tools__item header-tools__cart">
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <use href="#icon_heart" />
               </svg>
+              @if(Cart::instance('wishlist')->content()->count() > 0)
+               <span class="cart-amount d-block position-absolute js-cart-items-count">{{Cart::instance('wishlist')->content()->count() }}</span>
+              @endif
             </a>
   
             <a href="{{ route('shop.cart') }}" class="header-tools__item header-tools__cart">
@@ -628,7 +631,7 @@
   
       <div class="footer-bottom">
         <div class="container d-md-flex align-items-center">
-          <span class="footer-copyright me-auto">©2024 Surfside Media</span>
+          <span class="footer-copyright me-auto">©{{ date('Y')}} E commerce</span>
           <div class="footer-settings d-md-flex align-items-center">
             <a href="privacy-policy.html">Privacy Policy</a> &nbsp;|&nbsp; <a href="terms-conditions.html">Terms &amp;
               Conditions</a>
@@ -667,7 +670,11 @@
                 xmlns="http://www.w3.org/2000/svg">
                 <use href="#icon_heart" />
               </svg>
-              <span class="wishlist-amount d-block position-absolute js-wishlist-count">3</span>
+              {{-- @if(Cart::instance('wishlist')->content()->count() > 0) --}}
+              <span class="wishlist-amount d-block position-absolute js-wishlist-count">
+                {{ Cart::instance('wishlist')->content()->count() }} - 1
+              </span>
+              {{-- @endif --}}
             </div>
             <span>Wishlist</span>
           </a>
