@@ -6,6 +6,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\UserController;
@@ -83,3 +84,11 @@ Route::post("wishlist/move-to-cart/{rowId}", [WishlistController::class, 'moveTo
 # Apply Coupon Code
 Route::post("/cart/apply/coupon-code", [CartController::class, 'applyCouponCode'])->name('cart.applyCouponCode');
 Route::post("/cart/remove/coupon-code", [CartController::class, 'removeCouponCode'])->name('cart.removeCouponCode');
+
+Route::get("/checkout", [CartController::class, 'checkout'])->name('checkout');
+
+
+# Order
+    # Cash on delivery
+Route::post("/cart/place-order", [OrderController::class, 'placeOrder'])->name('placeOrder');
+Route::get("/order/confirm", [OrderController::class, 'orderConfirmation'])->name('order.confirmation');

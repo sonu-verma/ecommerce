@@ -15546,7 +15546,7 @@ body.coming-soon-page {
     }
 
     .error{
-      color: red;
+      color: red !important;
     }
 
     .status{

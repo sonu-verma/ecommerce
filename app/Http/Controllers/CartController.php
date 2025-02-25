@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Address;
 use App\Models\Coupon;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Surfsidemedia\Shoppingcart\Facades\Cart;
 
@@ -92,5 +94,16 @@ class CartController extends Controller
                 "total" => number_format(floatval($totalAfterDiscount), 2,'.',''),
             ]);
         }
+    }
+
+
+    public function checkout(){
+        if(!Auth::check()){
+            return redirect()->route('login');
+        }
+
+        $address = Address::where('isdefault', true)->orderBy('id', 'desc')->get()->first();
+        $cartItems = Cart::instance('cart')->content();
+        return view('shop.checkout', compact('address', 'cartItems'));
     }
 }
