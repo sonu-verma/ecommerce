@@ -176,3 +176,9 @@ body {
     height: 80px !important;
     width: 80px !important;
 }
+
+.budge{
+    color: white;
+    padding: 4px;
+    border-radius: 5px;
+}

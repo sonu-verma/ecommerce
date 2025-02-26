@@ -102,7 +102,7 @@ class CartController extends Controller
             return redirect()->route('login');
         }
 
-        $address = Address::where('isdefault', true)->orderBy('id', 'desc')->get()->first();
+        $address = Address::where('id_user', Auth::user()->id)->where('isdefault', true)->orderBy('id', 'desc')->get()->first();
         $cartItems = Cart::instance('cart')->content();
         return view('shop.checkout', compact('address', 'cartItems'));
     }

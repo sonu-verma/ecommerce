@@ -15556,3 +15556,14 @@ body.coming-soon-page {
     .success{
       color: green;
     }
+
+ table.order-details {
+      width: 100%;
+      border: 1px solid;
+      margin-top: 20px;
+  }
+
+  table.order-details tr, td, th{
+    border: 1px solid;
+    padding: 14px;
+}

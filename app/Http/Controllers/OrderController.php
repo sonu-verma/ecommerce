@@ -6,6 +6,7 @@ use App\Models\Address;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Transaction;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -13,6 +14,12 @@ use Surfsidemedia\Shoppingcart\Facades\Cart;
 
 class OrderController extends Controller
 {
+
+    public function index(){
+        $orders = Order::orderBy('id', 'desc')->get();
+        return view('admin.order.index', compact('orders'));
+    }
+
     public function placeOrder(Request $request){
 
         $userId = Auth::user()->id;
@@ -138,7 +145,54 @@ class OrderController extends Controller
             // dd($order->items[0]);
             return view('shop.orderConfirm', compact('order'));
         }else{
-            return redirect()->route('home');
+            return redirect()->route('login');
         }
+    }
+
+    public function orderDetails($id_order = null){
+        if($id_order){
+            $order = Order::where('id', $id_order)->get()->first();
+            if($order){
+                return view('admin.order.details', compact('order'));
+            }
+        }
+    }
+
+
+    public function updateStatus(Request $request, $id_order = null){
+        $status = $request->status;
+        if($id_order){
+            $order = Order::where('id', $id_order)->first();
+            if($order){
+                if($status == 'delivered'){
+                    $order->delivery_date = Carbon::now();
+                }else if($status == 'canceled'){
+                    $order->canceled_date = Carbon::now();
+                }
+
+                $order->status = $status;
+                $order->save();
+
+                if($status == 'delivered'){
+                    $transaction = Transaction::where('id_order', $order->id)->orderBy("id", 'desc')->first();
+                    $transaction->status = 'approved';
+                    $transaction->save();
+                }
+
+                return redirect()->back()->with("status", "Order status updated.");
+            }
+        }
+    }
+
+
+    public function cancelOrder(Request $request){
+        $orderId = $request->id_order;
+        $order = Order::where('id', $orderId)->get()->first();
+        if($order){
+            $order->status = 'canceled';
+            $order->canceled_date = Carbon::now();
+            $order->save();
+        }
+        return redirect()->back()->with("status", "Order canceled successfully.");
     }
 }

@@ -60,6 +60,10 @@ Route::middleware(['auth', AuthAdmin::class])->group(function(){
     Route::post("admin/coupon/update", [CouponController::class, 'update'])->name('coupon.update');
     Route::DELETE("admin/coupon/delete/{coupon}", [CouponController::class, 'delete'])->name('coupon.delete');
 
+    // orders
+    Route::get("admin/orders", [OrderController::class, 'index'])->name('orders');
+    ROute::get("admin/order/{id_order}/details", [OrderController::class, 'orderDetails'])->name('order.details');
+    ROute::post("admin/order/{id_order}/update", [OrderController::class, 'updateStatus'])->name('order.updateStatus');
 });
 
 Route::get("shop", [ShopController::class, 'shop'])->name('shop');
@@ -92,3 +96,9 @@ Route::get("/checkout", [CartController::class, 'checkout'])->name('checkout');
     # Cash on delivery
 Route::post("/cart/place-order", [OrderController::class, 'placeOrder'])->name('placeOrder');
 Route::get("/order/confirm", [OrderController::class, 'orderConfirmation'])->name('order.confirmation');
+
+
+# User Routes
+Route::get("account-orders", [UserController::class, 'orders'])->name('user.orders');
+Route::get("account-order/{id_order}/details", [UserController::class, 'orderDetails'])->name('user.orderDetails');
+Route::put("account-order/cancel-order", [OrderController::class, 'cancelOrder'])->name('user.orderCancel');
